@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platzi ecommerce</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h3>PlatziCommerce</h3>
+            <button 
+                class="cart"
+                v-on:click="cartOpen = !cartOpen"
+            >
+                Carrito (0)
+            </button>
+            <div class="cart-content" 
+                v-show="cartOpen"
+            >
+                <div 
+                    class="cart-content__product" 
+                    v-for="(product, index) in cart" 
+                    :key="product.name" 
+                    :class="{ 'bg-gray' : index & 1 }"
+                >
+                    <img :src="product.images[0].image" :alt="product.name" />
+                    <span>{{ product.name }} - $ {{ new Intl.NumberFormat("es-CO").format(product.price) }}</span>
+                </div>
+            </div>
+        </header>
+        <main>
+            <section class="product">
+                <div class="product__thumbnails">
+                    <div 
+                        v-for="(image, index) in product.images"
+                        :key="image.thumbnail"
+                        class="thumb" 
+                        :class="{ active: activeImage === index}" 
+                        :style="{ backgroundImage : 'url(' + product.images[index].thumbnail + ')' }"
+                        @click="activeImage = index"
+                    ></div>
+                </div>
+                <div class="product__image">
+                    <img :src="product.images[activeImage].image" :alt="product.name" />
+                </div>
+            </section>
+            <section class="description">
+                <h4>{{ product.name.toUpperCase() }} {{ product.stock === 0 ? "😢":"😊" }}</h4>
+                <span class="badge new" v-if="product.new">Nuevo</span>
+                <span class="badge offer" v-if="product.offer">Oferta</span>
+                <p class="description__status" v-if="product.stock > 3">Hay Unidades Disponibles</p>
+                <p class="description__status" v-else-if="product.stock === 3">Quedan pocas Unidades</p>
+                <p class="description__status" v-else-if="product.stock === 2">El producto esta por terminarse</p>
+                <p class="description__status" v-else-if="product.stock === 1">Ultima unidad Disponible</p>
+                <p class="description__status" v-else-if="product.stock === 0">No hay Unidades</p>
+                <p class="description__price">$ {{ new Intl.NumberFormat("es-CO").format(product.price) }}</p>
+                <p class="description__content">
+                    {{ product.content }}
+                </p>
+                <div class="discount">
+                    <span>codigo de descuento</span>
+                    <input type="text" placeholder="Ingresa tu codigo" @keyup.enter="product.price *= 50/100" />
+                </div>
+                <button :disabled="product.stock === 0" @click="product.stock -= 1">{{ product.stock > 0 ? "Añadir a Carrito" : "Agotado"}}</button>
+            </section>
+        </main>
+    </div>
+    <script src="https://unpkg.com/vue@3"></script>
+    <script>
+        const { createApp } = Vue;
+        const app = createApp({
+            data(){
+                return{
+                    product: {
+                        name: "camara",
+                        price: 450_000,
+                        stock: 5,
+                        content: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+                        Dolor quisquam architecto perspiciatis quibusdam minima 
+                        deserunt ipsam blanditiis labore quia ea minus nulla harum, 
+                        nesciunt quasi tempora corrupti id modi unde?`,
+                        images: [
+                            {
+                                image: "./images/camara.jpg",
+                                thumbnail:"./images/camara-thumb.jpg"
+                            },
+                            {
+                                image: "./images/camara-2.jpg",
+                                thumbnail:"./images/camara-2-thumb.jpg"
+                            }
+                        ],
+                        new: true, 
+                        offer: false,
+                    },
+                    activeImage: 1,
+                    cartOpen: true,
+                    cart:[
+                        {
+                            name: "camara",
+                            price: 450_000,
+                            stock: 0,
+                            content: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+                            Dolor quisquam architecto perspiciatis quibusdam minima 
+                            deserunt ipsam blanditiis labore quia ea minus nulla harum, 
+                            nesciunt quasi tempora corrupti id modi unde?`,
+                            images: [
+                                {
+                                    image: "./images/camara.jpg",
+                                    thumbnail:"./images/camara-thumb.jpg"
+                                },
+                                {
+                                    image: "./images/camara-2.jpg",
+                                    thumbnail:"./images/camara-2-thumb.jpg"
+                                }
+                            ],
+                            new: true, 
+                            offer: false
+                        },
+                        {
+                            name: "camara PL",
+                            price: 450_000,
+                            stock: 0,
+                            content: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+                            Dolor quisquam architecto perspiciatis quibusdam minima 
+                            deserunt ipsam blanditiis labore quia ea minus nulla harum, 
+                            nesciunt quasi tempora corrupti id modi unde?`,
+                            images: [
+                                {
+                                    image: "./images/camara.jpg",
+                                    thumbnail:"./images/camara-thumb.jpg"
+                                },
+                                {
+                                    image: "./images/camara-2.jpg",
+                                    thumbnail:"./images/camara-2-thumb.jpg"
+                                }
+                            ],
+                            new: true, 
+                            offer: false
+                        },
+                        {
+                            name: "camara PL2",
+                            price: 450_000,
+                            stock: 0,
+                            content: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+                            Dolor quisquam architecto perspiciatis quibusdam minima 
+                            deserunt ipsam blanditiis labore quia ea minus nulla harum, 
+                            nesciunt quasi tempora corrupti id modi unde?`,
+                            images: [
+                                {
+                                    image: "./images/camara.jpg",
+                                    thumbnail:"./images/camara-thumb.jpg"
+                                },
+                                {
+                                    image: "./images/camara-2.jpg",
+                                    thumbnail:"./images/camara-2-thumb.jpg"
+                                }
+                            ],
+                            new: true, 
+                            offer: false
+                        }
+                    ]
+                }
+            }
+        });
+        app.mount("#app");
+    </script>
+</body>
+</html>
