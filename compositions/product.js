@@ -15,6 +15,7 @@ app.component("product",{//nombre y opciones del componente
             <img :src="product.images[activeImage].image" :alt="product.name" />
         </div>
     </section>
+    
     <section class="description">
         <h4>{{ product.name.toUpperCase() }} {{ product.stock === 0 ? "😢":"😊" }}</h4>
         <badge :product="product"></badge>

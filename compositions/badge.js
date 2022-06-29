@@ -4,4 +4,5 @@ app.component("badge",{
     <span class="badge offer" v-if="product.badge.offer">Oferta</span>
     `,
     props: ["product"],
+    
 })

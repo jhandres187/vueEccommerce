@@ -39,6 +39,7 @@ app.component("product",{//nombre y opciones del componente
     props: ["product"],
     emits: ["sendtocart"],
     data(){
+        
         return{
             activeImage: 0,
             discountCodes: ["PLATZI20", "PLATZI21", "PLATZI22"],
