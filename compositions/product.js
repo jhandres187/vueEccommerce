@@ -15,7 +15,7 @@ app.component("product",{//nombre y opciones del componente
             <img :src="product.images[activeImage].image" :alt="product.name" />
         </div>
     </section>
-    
+
     <section class="description">
         <h4>{{ product.name.toUpperCase() }} {{ product.stock === 0 ? "😢":"😊" }}</h4>
         <badge :product="product"></badge>
@@ -24,7 +24,7 @@ app.component("product",{//nombre y opciones del componente
         <p class="description__status" v-else-if="product.stock === 2">El producto esta por terminarse</p>
         <p class="description__status" v-else-if="product.stock === 1">Ultima unidad Disponible</p>
         <p class="description__status" v-else-if="product.stock === 0">No hay Unidades</p>
-        <p class="description__price">$ {{ new Intl.NumberFormat("es-CO").format(product.price) }}</p>
+        <p class="description__price" :style="{color: price_color}">$ {{ new Intl.NumberFormat("es-CO").format(product.price) }}</p>
         <p class="description__content">
             {{ product.content }}
         </p>
@@ -41,8 +41,15 @@ app.component("product",{//nombre y opciones del componente
     emits: ["sendtocart"],
     setup(props, context){
         const productState = reactive({
-            activeImage: 0
+            activeImage: 0,
+            price_color:computed(() => props.product.stock<=1 ? "rgb(188, 30, 67)": "rgb(104, 104, 209)")
         });
+        // const price_color = computed(()=>{
+        //     if(props.product.stock <= 1){
+        //         return "rgb(188, 30, 67)";
+        //     }
+        //     return "rgb(104, 104, 209)";
+        // })
         const discountCodes = ref(["PLATZI20", "PLATZI21", "PLATZI22"]);
         function applyDiscount(event){
             const discountCodeIndex = discountCodes.value.indexOf(event.target.value);
@@ -51,14 +58,32 @@ app.component("product",{//nombre y opciones del componente
                 discountCodes.value.splice(discountCodeIndex, 1);
             }
         }
+
+        watch(
+            () => productState.activeImage, (value, oldValue) => {
+            console.log(value, oldValue);
+        });
+        // watch(
+        //     () => props.product.stock, (stock) => {
+        //         if(stock <= 1){
+        //             productState.price_color= "rgb(188, 30, 67)";
+        //         }
+        //     }
+        // );
+
         function sendToCart() { 
             context.emit("sendtocart", props.product);
         }
         return {
             ...toRefs(productState),
+            // price_color,
             sendToCart,
             applyDiscount,
         }
     }
     
 })
+
+
+
+

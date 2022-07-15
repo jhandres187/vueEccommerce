@@ -47,82 +47,9 @@
         const app = createApp({
             data(){
                 return{
-                    products: [
-                        {
-                            name: "camara",
-                            price: 450_000,
-                            stock: 5,
-                            content: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                            Dolor quisquam architecto perspiciatis quibusdam minima 
-                            deserunt ipsam blanditiis labore quia ea minus nulla harum, 
-                            nesciunt quasi tempora corrupti id modi unde?`,
-                            images: [
-                                {
-                                    image: "./images/camara.jpg",
-                                    thumbnail:"./images/camara-thumb.jpg"
-                                },
-                                {
-                                    image: "./images/camara-2.jpg",
-                                    thumbnail:"./images/camara-2-thumb.jpg"
-                                }
-                            ],
-                            badge: {
-                                new: true, 
-                                offer: false
-                            },
-                            quantity: 1,
-                        },
-                        {
-                            name: "camara pl2",
-                            price: 480_000,
-                            stock: 3,
-                            content: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                            Dolor quisquam architecto perspiciatis quibusdam minima 
-                            deserunt ipsam blanditiis labore quia ea minus nulla harum, 
-                            nesciunt quasi tempora corrupti id modi unde?`,
-                            images: [
-                                {
-                                    image: "./images/camara.jpg",
-                                    thumbnail:"./images/camara-thumb.jpg"
-                                },
-                                {
-                                    image: "./images/camara-2.jpg",
-                                    thumbnail:"./images/camara-2-thumb.jpg"
-                                }
-                            ],
-                            badge: {
-                                new: false, 
-                                offer: true
-                            },
-                            quantity: 1,
-                        },
-                        {
-                            name: "camara pl3",
-                            price: 480_000,
-                            stock: 3,
-                            content: `Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
-                            Dolor quisquam architecto perspiciatis quibusdam minima 
-                            deserunt ipsam blanditiis labore quia ea minus nulla harum, 
-                            nesciunt quasi tempora corrupti id modi unde?`,
-                            images: [
-                                {
-                                    image: "./images/camara.jpg",
-                                    thumbnail:"./images/camara-thumb.jpg"
-                                },
-                                {
-                                    image: "./images/camara-2.jpg",
-                                    thumbnail:"./images/camara-2-thumb.jpg"
-                                }
-                            ],
-                            badge: {
-                                new: true, 
-                                offer: true
-                            },
-                            quantity: 1,
-                        }
-                    ],
+                    products: [],
                     cartOpen: true,
-                    total: 0,
+                    //total: 0,
                     cart:[],
                 };
             },
@@ -138,16 +65,37 @@
                 }
             },
             watch:{
-                cart: {
-                    handler(cart){
-                        this.total = cart.reduce((prev, curr) =>{
-                            const prevPrice = prev.price || prev;
-                            const prevQuantity = prev.quantity  || 1;
-                            return prevPrice * prevQuantity + curr.price * curr.quantity;
-                        }, 0);
-                    },
-                    deep: true
+            //    cart: {
+            //        handler(cart){
+            //            this.total = cart.reduce((prev, curr) =>{
+            //                const prevPrice = prev.price || prev;
+            //                const prevQuantity = prev.quantity  || 1;
+            //                return prevPrice * prevQuantity + curr.price * curr.quantity;
+            //            }, 0);
+            //        },
+            //        deep: true
+            //    }
+            },
+            computed: {
+                total(){
+                    //if(){
+                        return this.cart.reduce((prev, curr) =>{
+                                    const prevPrice = prev.price || prev;
+                                    const prevQuantity = prev.quantity  || 1;
+                                    return prevPrice * prevQuantity + curr.price * curr.quantity;
+                                }, 0);
+                   // }
                 }
+            },
+            //beforeCreate(){//ejecutar codigo cuando antes de que la parte reactiva  este disponible
+              //  console.log("beforeCreated");
+            //},
+            created(){//permite acceder al ciclo de vida cargar informacion de manera externa antes de que se empiese a montar
+                fetch('https://my-json-server.typicode.com/jhandres187/myJsonServerApiDemo/products/')
+                .then(res => res.json())
+                .then(data => {
+                    this.products = data;
+                })
             }
         });
     </script>
