@@ -44,6 +44,7 @@ app.component("product",{//nombre y opciones del componente
             activeImage: 0,
             discountCodes: ["PLATZI20", "PLATZI21", "PLATZI22"],
             // price_color: "rgb(104, 104, 209)"
+            
         };
     },
     methods: {

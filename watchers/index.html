@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Title</title>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <style>
+            html, body {
+                height: 100vh;
+                margin: 0;
+                font-family: Arial, Helvetica, sans-serif;
+            }
+            #app, .container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                width: 100%;
+                height: 100%;
+            }
+            button {
+                margin-top: 24px;
+                border: none;
+                background-color: white;
+                padding: 8px 24px;
+                border-radius: 12px;
+            }
+            .closed {
+                background-color: #eca1a6;
+            }
+            .open {
+                background-color: #b5e7a0;
+            }
+            .list{
+                display: flex;
+                flex-direction: column;
+            }
+            .item{
+                border: 1px solid #333;
+            }
+            .item-title{
+                font-weight: bold;
+                font-size: 20px;
+            }
+        </style>
+    </head>
+    <body>
+        <marquee behavior="text-behavior" direction="ltr">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quod et non, vero harum ullam, veritatis cumque soluta quos ducimus pariatur rem nostrum odio porro sed qui eaque amet dolores repellendus!</marquee>
+        <div id="app"></div>
+        <script src="https://unpkg.com/vue@3"></script>
+        <script>
+            const app = Vue.createApp({  
+                data(){
+                    return { 
+                        text: "Hola Vue",
+                        open: false,
+                        text2: "puerta cerrada",
+                        userName: "",
+                        posts:[
+                            {
+                                title: "Hola Vue",
+                                description: "Lorem ipsu ..."
+                            },
+                            {
+                                title: "Hola Vue",
+                                description: "Lorem ipsu ..."
+                            },
+                        ]
+                        //styles: {
+                          //  backgroundColor: "#e5e5e5"
+                        //}
+                    }
+                },
+                methods: {
+                },
+                computed: {
+                    label(){
+                        return this.open ? 'Cerrar' : 'abrir';
+                    },
+                    styles(){
+                        return this.open ? ['open']: ['closed'];
+                    }
+                },
+                watch: {
+                    text(valor, valorAntiguo){//el watch debe llamarse igual que la variable que se quiere ver recibe 2 valores el valor y el valor antiguo
+                        console.log(valorAntiguo);
+                    },
+                    open(now){
+                        if(now){
+                            this.text2 = 'puerta abierta';
+                            //this.styles.backgroundColor = "#b5e7a0";
+                        }else{
+                            this.text2 = 'puerta cerrada';
+                            this.userName = "";
+                            //this.styles.backgroundColor = "#eca1a6";
+                        }
+                    }
+                },
+                //:style="styles"
+                //{ 'open' : open, 'closed': !open}
+                template: `
+                    <div class="container" :class="styles"> {{ text }} 
+                        <h2> {{ text2 }} </h2>
+                        <div v-if="open">
+                            <p>Hola, {{ userName }}</p>
+                            <br />
+                            <div class="list">
+                                <item-list 
+                                    v-for="(item, i) in posts" 
+                                    :key="i"
+                                    :post="item"
+                                >
+                                </item-list>
+                            </div>
+                        </div> 
+                        <div v-else>
+                            <input type="text" v-model="userName" placeholder="escribe tu nombre..."/>
+                        </div>
+                        <button @click="open = !open"> {{ label }} 
+                            <div v-if="!open">abrir</div>
+                            <div v-else >cerrar</div>
+                        </button>
+                    </div>
+                `
+            })
+            app.component("item-list", {
+                props: ["post"],
+                template: `
+                <div class="item">
+                    <h4 class="item-title">{{ post.title}}</h4>
+                    <p>{{ post.description }}</p>
+                </div>
+                `
+            });
+            const vm = app.mount("#app");
+        </script>
+    </body>
+</html>

@@ -33,8 +33,12 @@
             </div>
         </header>
         <main>
+            <section>
+                <input type="search" id="site-search" name="query" v-model="word" placeholder="Ingresar Producto" @input="search()">
+            </section>
+            <br />
             <product
-            v-for="product in products" 
+            v-for="product in filterProducts" 
             :key="product.name" 
             :product="product" 
             @sendtocart="addToCart($event)"
@@ -51,6 +55,8 @@
                     cartOpen: true,
                     //total: 0,
                     cart:[],
+                    word: "",
+                    query: ""
                 };
             },
             methods: {
@@ -62,6 +68,9 @@
                         this.cart.push(product);
                     }
                     product.stock -= 1;
+                },
+                search(){
+                    this.query = this.word;
                 }
             },
             watch:{
@@ -85,6 +94,13 @@
                                     return prevPrice * prevQuantity + curr.price * curr.quantity;
                                 }, 0);
                    // }
+                },
+                filterProducts(){
+                    if(this.query != "") {
+                        return this.products.filter(prod => prod.name.toLowerCase().includes(this.query.toLowerCase()));
+                      // return this.products.filter(prod => prod.name.toLowerCase().includes(this.query.toLowerCase()) ? prod : false);
+                    }
+                    return this.products;
                 }
             },
             //beforeCreate(){//ejecutar codigo cuando antes de que la parte reactiva  este disponible
